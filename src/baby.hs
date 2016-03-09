@@ -197,4 +197,24 @@ chain n
     | even n = n:chain (n `div` 2)
 numLongChains :: Int
 numLongChains = length (filter isLong (map chain [1..100]))
-    where isLong xs =
+    where isLong xs = length xs > 15
+-- lambda
+numLongChainsLambda :: Int
+numLongChainsLambda = length (filter (\xs -> length xs > 15) (map chain [1..100]))
+-- zipWith (\a b -> (a * 30 + 3) / b) [5,4,3,2,1] [1,2,3,4,5] = [153.0,61.5,31.0,15.75,6.6]
+
+-- folds
+sum' :: (Num a) => [a] -> a
+sum' xs = foldl (\acc x -> acc + x) 0 xs
+-- the same
+sum'' :: (Num a) => [a] -> a
+sum'' = foldl (+) 0
+-- elem foldl
+elem'' :: (Eq a) => a -> [a] -> Bool
+elem'' y ys = foldl (\acc x -> if x == y then True else acc) False ys
+-- map foldr
+map'' :: (a -> b) -> [a] -> [b]
+map'' f xs = foldr (\x acc -> f x : acc) [] xs
+
+-- function composition (.)
+-- map (negate . sum . tail) [[1..5], [3..6], [1..7]] == [-14,-15,-27]
