@@ -104,3 +104,97 @@ describeListCase :: [a] -> String
 describeListCase xs = "This is " ++ case xs of [] -> "empty."
                                                [x] -> "a singleton list."
                                                xs -> "a longer list."
+
+-- maximum recursive
+maximum' :: (Ord a) => [a] -> a
+maximum' [] = error "Empty list"
+maximum' [x] = x
+maximum' (x:xs)
+    | x > tailMaximum = x
+    | otherwise = tailMaximum
+    where tailMaximum = maximum' xs
+
+-- replicate recursive
+replicate' :: (Num i, Ord i) => i -> a -> [a]
+replicate' n x
+    | n <= 0    = []
+    | otherwise = x : replicate' (n - 1) x
+
+-- take recursive
+take' :: (Num i, Ord i) => i -> [a] -> [a]
+take' n _
+    | n <= 0   = []
+take' _ []     = []
+take' n (x : xs) = x : take' (n - 1) xs
+
+-- reverse recursive
+reverse' :: [a] -> [a]
+reverse' [] = []
+reverse' (x:xs) = reverse' xs ++ [x]
+
+-- zip recursive
+zip' :: [a] -> [a] -> [(a, a)]
+zip' _ [] = []
+zip' [] _ = []
+zip' (x:xs) (y:ys) = (x, y) : zip' xs ys
+
+-- elem recursive
+elem' :: (Eq a) => a -> [a] -> Bool
+elem' a [] = False
+elem' a (x:xs)
+    | a == x    = True
+    | otherwise = elem' a xs
+
+-- quick sort
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x:xs) =
+    let smaller  = quicksort [a | a <- xs, a <= x]
+        bigger   = quicksort [a | a <- xs, a > x]
+    in smaller ++ [x] ++ bigger
+
+-- using sections in parentheses in infix functions. no need to supply param
+divideByTen :: (Floating a) => a -> a
+divideByTen = ( / 10)
+
+-- higher order function
+multThree :: (Num a) => a -> a -> a -> a
+multThree a b c = a * b * c
+multTwoWithNine = multThree 9
+multWithEighteen = multTwoWithNine 2
+
+-- passing function to another
+applyTwice :: (a -> a) -> a -> a
+applyTwice f x = f (f x)
+-- applyTwice (multThree 2 3) 2 == 72
+
+-- zip with a function
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _ _ [] = []
+zipWith' _ [] _ = []
+zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
+-- zipWith' (+) [1, 20] [3, 1] == [4, 21]
+-- zipWith' (*) (replicate' 5 2) [1..] == [2,4,6,8,10]
+
+-- flip params
+flip' :: (a -> b -> c) -> (b -> a -> c)
+flip' f = g
+    where g x y = f y x
+-- (flip' (/)) 1 2 == 2.0
+
+-- filter
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' _ [] = []
+filter' p (x:xs)
+    | p x       = x : filter' p xs
+    | otherwise = filter' p xs
+
+-- Collatz sequence
+chain :: (Integral a) => a -> [a]
+chain 1 = [1]
+chain n
+    | odd n = n:chain (n * 3 + 1)
+    | even n = n:chain (n `div` 2)
+numLongChains :: Int
+numLongChains = length (filter isLong (map chain [1..100]))
+    where isLong xs =
