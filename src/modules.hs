@@ -28,3 +28,9 @@ numUniques = length . nub
 numUniquesWithValues :: (Ord a) => [a] -> [(a, Int)]
 numUniquesWithValues xs = map (\l@(x:xs) -> (x, length l)) . group . sort $ xs
 -- numUniquesWithValues [1,1,1,1,2,2,2,2,3,3,2,2,2,5,6,7] == [(1,4),(2,7),(3,2),(5,1),(6,1),(7,1)]
+
+search :: (Eq a) => [a] -> [a] -> Bool
+search needle haystack =
+    let nlen = length needle
+    -- tails: "ABC" -> ["ABC", "BC", "C", ""]
+    in  foldl (\acc x -> if take nlen x == needle then True else acc) False (tails haystack)
