@@ -1,4 +1,6 @@
 import Data.List
+import qualified Data.Map as Map
+import qualified Geometry.Cube as Cube
 -- only nub and sort are imported
 -- import Data.List (nub, sort)
 -- import everything except nub
