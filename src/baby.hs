@@ -39,6 +39,7 @@ head' (h:_) = h
 
 recursiveLength :: (Num b) => [a] -> b
 recursiveLength [] = 0
+
 recursiveLength (_:tail) = 1 + recursiveLength tail
 
 recursiveSum :: (Num a) => [a] -> a
@@ -209,12 +210,32 @@ sum' xs = foldl (\acc x -> acc + x) 0 xs
 -- the same
 sum'' :: (Num a) => [a] -> a
 sum'' = foldl (+) 0
+-- the same
+sum''' :: (Num a) => [a] -> a
+sum''' = foldl1 (+)
 -- elem foldl
 elem'' :: (Eq a) => a -> [a] -> Bool
 elem'' y ys = foldl (\acc x -> if x == y then True else acc) False ys
 -- map foldr
 map'' :: (a -> b) -> [a] -> [b]
 map'' f xs = foldr (\x acc -> f x : acc) [] xs
+
+maximum'' :: (Ord a) => [a] -> a
+maximum'' = foldl1 (\acc x -> if acc < x then x else acc)
+reverse'' :: [a] -> [a]
+reverse'' = foldl (\acc x -> x : acc ) []
+reverse''' :: [a] -> [a]
+reverse''' = foldl (flip (:)) []
+filter'' :: (a -> Bool) -> [a] -> [a]
+filter'' p = foldr (\x acc -> if p x then x : acc else acc) []
+
+-- How many elements does it take for the sum of the roots of all natural numbers to exceed 1000
+-- map sqrt [1..] generates sqrts
+-- scanl1 (+) ... changes it to [sqrt(1), sqrt(1) + sqrt(2), sqrt(1) + sqrt(2) + sqrt(3), ...], last element is the sum of the roots
+-- takeWhile (<1000) ... takes all the elements until the last exceeds the sum of the roots, so it's not included
+-- resulting list contains the number of the needed roots to constitute the sum, but without one element which is not included on the previous step, hence + 1
+sqrtSums :: Int
+sqrtSums = length (takeWhile (<1000) (scanl1 (+) (map sqrt [1..]))) + 1
 
 -- function composition (.)
 -- map (negate . sum . tail) [[1..5], [3..6], [1..7]] == [-14,-15,-27]
