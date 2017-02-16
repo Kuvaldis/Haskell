@@ -237,5 +237,20 @@ filter'' p = foldr (\x acc -> if p x then x : acc else acc) []
 sqrtSums :: Int
 sqrtSums = length (takeWhile (<1000) (scanl1 (+) (map sqrt [1..]))) + 1
 
+-- function application (&)
+
+calc1 :: (Integral a) => [a] -> a
+calc1 xs = sum (filter (>10) (map (*2) xs))
+-- calc1 [1, 2, 3, 4, 5, 6, 7] == 26
+calc1' :: (Integral a) => [a] -> a
+calc1' xs = sum $ filter (>10) $ map (*2) xs
+-- calc1' [1, 2, 3, 4, 5, 6, 7] == 26
+
 -- function composition (.)
+multiplyBy3AndNegate :: (Num a) => a -> a
+multiplyBy3AndNegate = negate . (*3)
+-- multiplyBy3AndNegate 3 == -9
+calc2 :: (Integral a) => [[a]] -> a
+calc2 xss = map (\xs -> negate (sum (tail xs))) xss
+
 -- map (negate . sum . tail) [[1..5], [3..6], [1..7]] == [-14,-15,-27]
