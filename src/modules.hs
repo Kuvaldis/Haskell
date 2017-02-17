@@ -57,7 +57,20 @@ data Person = Person { firstName :: String
                      , age :: Int
                      } deriving (Eq, Show, Read)
 
+showPerson = show Person {firstName = "Michael", lastName = "Diamond", age = 43}
+readPerson = (read "Person {firstName =\"Michael\", lastName =\"Diamond\", age = 43}" :: Person) == Person {firstName = "Michael", lastName = "Diamond", age = 43}
+
 data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
            deriving (Eq, Ord, Show, Read, Bounded, Enum)
--- Bounded minBound :: Day == Monday
--- Bounded maxBound :: Day == Sunday
+-- Eq and Ord
+dayCompare = Monday `compare` Wednesday == LT
+-- Show
+dayShow = show Wednesday == "Wednesday"
+-- Read
+dayRead = (read "Wednesday" :: Day) == Wednesday
+-- Bounded
+dayMinBound = (minBound :: Day) == Monday
+dayMaxBound = (maxBound :: Day) == Sunday
+-- Enum
+daySuccessor = (succ Monday) == Tuesday
+dayPredecessor = (pred Saturday) == Friday
