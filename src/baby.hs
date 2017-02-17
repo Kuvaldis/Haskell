@@ -250,7 +250,10 @@ calc1' xs = sum $ filter (>10) $ map (*2) xs
 multiplyBy3AndNegate :: (Num a) => a -> a
 multiplyBy3AndNegate = negate . (*3)
 -- multiplyBy3AndNegate 3 == -9
-calc2 :: (Integral a) => [[a]] -> a
+calc2 :: (Integral a) => [[a]] -> [a]
 calc2 xss = map (\xs -> negate (sum (tail xs))) xss
+calc2' :: (Integral a) => [[a]] -> [a]
+calc2' = map $ negate . sum . tail
+-- calc2 [[1..5], [3..6], [1..7]] == calc2' [[1..5], [3..6], [1..7]] == [-14,-15,-27]
 
--- map (negate . sum . tail) [[1..5], [3..6], [1..7]] == [-14,-15,-27]
+
